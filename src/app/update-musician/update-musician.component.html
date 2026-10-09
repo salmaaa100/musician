@@ -1,0 +1,49 @@
+<div class="container mt-4">
+  <h3 class="mb-3">Modifier un musicien</h3>
+  <form #formModif="ngForm" (ngSubmit)="updateMusician()">
+    <div class="mb-3">
+      <label class="form-label">ID</label>
+      <input type="number" class="form-control" name="idMusician" [(ngModel)]="currentMusician.idMusician" readonly>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Nom</label>
+      <input type="text" class="form-control" name="nom" [(ngModel)]="currentMusician.nom"
+        required minlength="3" #nom="ngModel">
+      @if (nom.invalid && (nom.dirty || nom.touched)) {
+        <div class="text-danger">
+          @if (nom.errors?.['required']) { Le nom est obligatoire. }
+          @if (nom.errors?.['minlength']) { Le nom doit contenir au moins 3 caractères. }
+        </div>
+      }
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Instrument</label>
+      <input type="text" class="form-control" name="instrument" [(ngModel)]="currentMusician.instrument"
+        required #instrument="ngModel">
+      @if (instrument.invalid && (instrument.dirty || instrument.touched)) {
+        <div class="text-danger">L'instrument est obligatoire.</div>
+      }
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Date de naissance</label>
+      <input type="date" class="form-control" name="dateNaissance"
+        [ngModel]="currentMusician.dateNaissance | date: 'yyyy-MM-dd'"
+        (ngModelChange)="changerDate($event)" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Genre</label>
+      <select class="form-select" name="idGenre" [(ngModel)]="idGenreChoisi">
+        @for (g of genres; track g.idGenre) {
+          <option [ngValue]="g.idGenre">{{ g.nomGenre }}</option>
+        }
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary me-2" [disabled]="formModif.invalid">Modifier</button>
+    <button type="button" class="btn btn-secondary" (click)="router.navigate(['musicians'])">Annuler</button>
+  </form>
+</div>
